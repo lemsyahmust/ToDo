@@ -24,6 +24,22 @@ class RegisterForm(FlaskForm):
 
     submit = SubmitField("Register")
 
+    def validate_username(self, username):
+        existing_user_username = User.query.filter_by(
+            username = username.data).first()
+
+        if existing_user_username:
+            raise ValidationError(
+                "That Username Already exists. Please Choose a Different One.")
+
+class LoginForm(FlaskForm):
+    username = StringField(validators=[InputRequired(), Length(
+        min = 4, max = 20)], render_kw={"placeholder": "Username"})
+    password = PasswordField(validators=[InputRequired(), Length(
+        min = 4, max = 20)], render_kw={"placeholder": "Password"})
+
+    submit = SubmitField("Login")
+
 
 @app.route('/')
 def home():
