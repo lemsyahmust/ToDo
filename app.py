@@ -88,6 +88,23 @@ def add():
     db.session.commit()
     return redirect(url_for("dashboard"))
 
+@app.route("/update/<int:todo_id_todo>")
+def update(todo_id_todo):
+    # update todo
+    todo = Todo.query.filter_by(id_todo=todo_id_todo).first()
+    todo.body = not todo.body
+    db.session.commit()
+    return redirect(url_for("dashboard"))
+
+@app.route("/delete/<int:todo_id_todo>")
+def delete(todo_id_todo):
+    # delete todo
+    todo = Todo.query.filter_by(id_todo=todo_id_todo).first()
+    db.session.delete(todo)
+    db.session.commit()
+    return redirect(url_for("dashboard"))
+
+
 @app.route('/logout', methods = ['GET','POST'])
 @login_required
 def logout():
