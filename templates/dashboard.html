@@ -9,12 +9,26 @@
 </head>
 <body>
     <center><h1>Welcome To Your Session.</h1></center>
-    <form action="">
+    <form action="/add">
         <div>
-            <label for="title">Todo</label>
-            <input type="text" name="title" placeholder="Enter Your ToDo.......">
+            <label for="title">Todo Title : &nbsp;</label>
+            <input type="text" name="title" placeholder="Enter Your ToDo......."><br>
+            <button type="submit">Add</button>
         </div>
     </form>
+    {% for todo in todo_list %}
+        <p> {{ todo.id_todo }} | {{ todo.title }}</p>
+
+        {% if todo.body == False %}
+             <span>Not Completed</span>
+        {% else %}
+             <span>Completed</span>
+        {% endif %}
+        <a href="/">Update</a>
+        <a href="/">Delete</a>
+    {% endfor %}
+<br>
+
     <a href="{{url_for('logout')}}">Pess here to logout</a>
 </body>
 </html>
