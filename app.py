@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect
+from flask import Flask, render_template, url_for, redirect, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -11,6 +11,7 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # 2
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -25,6 +26,12 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(20), nullable = False, unique = True)
     password = db.Column(db.String(80), nullable = False)
+
+class Todo(db.Model) :
+    id_todo = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(100))
+    body = db.Column(db.Boolean)
+
 
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(
@@ -69,7 +76,17 @@ def login():
 @app.route('/dashboard', methods=['GET', 'post'])
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    todo_list = Todo.query.all()
+    return render_template('dashboard.html', todo_list = todo_list)
+
+@app.route("/add", methods =  ["POST"])
+def add():
+    # add new todo
+    title = request.form.get("title")
+    new_todo = Todo(title = title , body = False)
+    db.session.add(new_todo)
+    db.session.commit()
+    return redirect(url_for("dashboard"))
 
 @app.route('/logout', methods = ['GET','POST'])
 @login_required
@@ -92,4 +109,6 @@ def register():
 
 
 if __name__ == '__main__':
+    db.create_all()   #2
+
     app.run(debug=True)
