@@ -16,13 +16,17 @@
     <form class="ui form" action="/add" method = "POST">
         <div class="field">
             <label for="title">Todo Title : &nbsp;</label>
-            <input type="text" name="title" placeholder="Enter Your ToDo......."><br>
+            <input type="text" name="title" placeholder="Enter Your ToDo......."><br><br>
+            <input type="text" name="texte" placeholder="Enter Your Desciption......"><br><br>
+           <!-- <input type="date" id="thedate" name="date" ><br><br> -->
+           <!--   <p>The date and time is: {{ date_time }}</p> -->
             <button class="ui blue button" type="submit">Add</button>
         </div>
     </form>
     {% for todo in todo_list %}
     <div class="ui segment">
-        <p class="ui big header"> {{ todo.id_todo }} | {{ todo.title }}</p>
+        <p class="ui big header"> {{ todo.id_todo }} | {{ todo.title }} | {{ todo.date_todo }}</p><br>
+        <p> {{ todo.texte }} </p>
 
         {% if todo.body == False %}
              <span class="ui gray label">Not Completed</span>
