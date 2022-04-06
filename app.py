@@ -5,9 +5,12 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, ValidationError, Length
 from flask_bcrypt import Bcrypt
+from flask_migrate import Migrate
+#from datetime import datetime
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SECRET_KEY'] = 'thisisasecretkey'
@@ -31,7 +34,8 @@ class Todo(db.Model) :
     id_todo = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(100))
     body = db.Column(db.Boolean)
-
+    texte = db.Column(db.String(100))
+    #date_todo = db.Column(db.DateTime)
 
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(
@@ -127,5 +131,4 @@ def register():
 
 if __name__ == '__main__':
     db.create_all()   #2
-
     app.run(debug=True)
