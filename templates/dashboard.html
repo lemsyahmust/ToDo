@@ -19,7 +19,13 @@
             <input type="text" name="title" placeholder="Enter Your ToDo......."><br><br>
             <input type="text" name="texte" placeholder="Enter Your Desciption......"><br><br>
            <!-- <input type="date" id="thedate" name="date" ><br><br> -->
-           <!--   <p>The date and time is: {{ date_time }}</p> -->
+
+            <p><span id="datetime"></span> </p>
+            <script>
+            var date_todo = new Date();
+            document.getElementById( "datetime" ).innerHTML = date_todo.toLocaleString();
+            </script>
+
             <button class="ui blue button" type="submit">Add</button>
         </div>
     </form>
