@@ -6,7 +6,7 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, ValidationError, Length
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
-#from datetime import datetime
+from datetime import datetime
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
@@ -35,7 +35,7 @@ class Todo(db.Model) :
     title = db.Column(db.String(100))
     body = db.Column(db.Boolean)
     texte = db.Column(db.String(100))
-    #date_todo = db.Column(db.DateTime)
+    date_todo = db.Column(db.DateTime)
 
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(
@@ -83,11 +83,15 @@ def dashboard():
     todo_list = Todo.query.all()
     return render_template('dashboard.html', todo_list = todo_list)
 
+
+
 @app.route("/add", methods =  ["POST"])
 def add():
     # add new todo
     title = request.form.get("title")
-    new_todo = Todo(title = title , body = False)
+    texte = request.form.get("texte")
+    date_todo = request.form.get("date_todo")
+    new_todo = Todo(title = title , body = False, texte = texte, date_todo = date_todo )
     db.session.add(new_todo)
     db.session.commit()
     return redirect(url_for("dashboard"))
